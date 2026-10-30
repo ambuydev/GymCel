@@ -1,0 +1,51 @@
+El problema más probable está en que estás usando dos mecanismos distintos para mostrar controles, pero solo uno está llegando al reloj:
+1.	Notificaciones normales mediante flutter_local_notifications.
+•	Funcionan porque recibes avisos y vibración.
+•	Las acciones Pausar/Reanudar y Siguiente Serie se añaden como acciones de una notificación Android.
+•	Xiaomi/MI Fitness puede reenviar la notificación al reloj, pero ocultar sus botones de acción.
+2.	Controles multimedia mediante audio_service.
+•	Son los que deberían aparecer como controles persistentes de reproducción en Wear OS o en la pantalla multimedia del smartwatch.
+•	En GymcelAudioHandler defines correctamente:
+controls: [
+  if (isPaused) MediaControl.play else MediaControl.pause,
+  MediaControl.skipToNext,
+],
+
+Al capturar la excepción sin registrarla, la aplicación continúa funcionando con las notificaciones normales. Esto explica exactamente el comportamiento observado:
+•	Llegan las notificaciones.
+•	Funciona la vibración.
+•	Se informa del inicio, descanso y finalización.
+•	No aparecen los controles de pausa/reanudar ni siguiente.
+Solución sugerida
+1. Declarar el servicio multimedia en android/app/src/main/AndroidManifest.xml
+Deberías añadir el permiso y el servicio requeridos por audio_service, siguiendo la configuración de la versión concreta del paquete que utilices. Normalmente incluye:
+•	Permiso de servicio en primer plano para reproducción multimedia.
+•	Servicio com.ryanheise.audioservice.AudioService.
+•	MediaButtonReceiver.
+•	Intent-filter de MediaBrowserService.
+Sin esta configuración, AudioService.init() no puede registrar correctamente la notificación multimedia.
+2. No ocultar la excepción
+Durante el diagnóstico, cambia temporalmente:
+
+} catch (_) {}
+
+por algo que registre el error:
+
+} catch (error, stackTrace) {
+  debugPrint('Error inicializando controles multimedia: $error');
+  debugPrintStack(stackTrace: stackTrace);
+}
+
+Así podrás confirmar si el error es de manifiesto, permisos o inicialización nativa.
+3. Revisar androidStopForegroundOnPause
+Actualmente tienes:
+
+androidStopForegroundOnPause: true,
+
+Al pausar, Android puede retirar la notificación multimedia completa. Para conservar los controles en el reloj, sería más apropiado probar:
+
+androidStopForegroundOnPause: false,
+
+4. No depender únicamente de las acciones de notificación
+Las acciones definidas en AndroidNotificationDetails no garantizan que Xiaomi Watch o MI Fitness las muestre. El fabricante puede reenviar el texto y la vibración, pero eliminar los botones. Para controles fiables, la vía adecuada es audio_service correctamente configurado como notificación multimedia.
+También conviene comprobar que audio_service, flutter_local_notifications, audioplayers y vibration estén declarados explícitamente en pubspec.yaml; en el archivo actual no aparecen esas dependencias, aunque el código las importa.

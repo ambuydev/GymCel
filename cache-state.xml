@@ -1,0 +1,33 @@
+<project version="4">
+  <component name="MarkdownArtifactFilesPersistentStateV2">
+    <knownArtifactFiles>
+      <entry virtualFileUrl="file://$USER_HOME$/AppData/Local/Google/AndroidStudio2025.3.4/projects/gymcel.49b62891/.artifacts/20261029-104351-e45b09eb-53d5-4932-91d6-d290474e933f/implementation_plan.artifact.md">
+        <fileState commentingSessionTitle="Implementation Plan" lastModifiedTimeUtc="2026-10-29T14:00:00Z" />
+      </entry>
+      <entry virtualFileUrl="file://$USER_HOME$/AppData/Local/Google/AndroidStudio2025.3.4/projects/gymcel.49b62891/.artifacts/20261029-104351-e45b09eb-53d5-4932-91d6-d290474e933f/task.artifact.md">
+        <fileState commentingSessionTitle="Task List" lastModifiedTimeUtc="2026-10-29T14:00:00Z" />
+      </entry>
+      <entry virtualFileUrl="file://$USER_HOME$/AppData/Local/Google/AndroidStudio2025.3.4/projects/gymcel.49b62891/.artifacts/20261029-104351-e45b09eb-53d5-4932-91d6-d290474e933f/walkthrough.artifact.md">
+        <fileState commentingSessionTitle="Walkthrough" lastModifiedTimeUtc="2026-10-29T14:00:00Z" />
+      </entry>
+    </knownArtifactFiles>
+  </component>
+  <component name="Project">
+    <option name="lastProjectScan" value="1793281734" />
+  </component>
+  <component name="RestoreUpdateTree"><![CDATA[{}]]></component>
+  <component name="StoredSessionsInfoStore">
+    <option name="sessions">
+      <list>
+        <SessionInfoState>
+          <option name="id" value="20261029-104351-e45b09eb-53d5-4932-91d6-d290474e933f" />
+          <option name="lastUpdateTimestamp" value="1793286298485" />
+          <option name="responseMode" value="Agent" />
+          <option name="title" value="Vamos a crear una aplicación en Flutter, para poder compilar luego para iOS y" />
+          <option name="totalTokenCount" value="160775" />
+          <option name="user" value="alejandro.martinez.briao@gmail.com" />
+        </SessionInfoState>
+      </list>
+    </option>
+  </component>
+</project>

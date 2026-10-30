@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "141406653072",
+    "project_id": "gymcel-43f73",
+    "storage_bucket": "gymcel-43f73.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141406653072:android:025bb2e21b99b12a592615",
+        "android_client_info": {
+          "package_name": "com.gymcel.gymcel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCffMVgKts3ZQKmIj2rWNFeIvos5M56QI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

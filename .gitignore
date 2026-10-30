@@ -1,0 +1,6 @@
+*.apk
+.artifacts/
+history-storage/
+build/
+.idea/
+.vs/
