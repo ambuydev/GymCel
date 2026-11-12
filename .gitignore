@@ -4,3 +4,5 @@ history-storage/
 build/
 .idea/
 .vs/
+
+.dart_tool/
