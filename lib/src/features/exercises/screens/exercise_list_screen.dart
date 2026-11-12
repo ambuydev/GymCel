@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/exercise.dart';
 import '../providers/exercise_provider.dart';
 
 class ExerciseListScreen extends ConsumerWidget {
@@ -91,11 +92,19 @@ class ExerciseListScreen extends ConsumerWidget {
                             '${exercise.category} • ${exercise.equipment ?? "General"}',
                             style: const TextStyle(color: Colors.grey, fontSize: 12),
                           ),
-                          trailing: Icon(
-                            exercise.isCustom ? Icons.person_outline : Icons.fitness_center,
-                            color: exercise.isCustom ? const Color(0xFF00E676) : Colors.grey,
-                            size: 20,
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.info_outline, color: Color(0xFF00E676), size: 20),
+                              const SizedBox(width: 8),
+                              Icon(
+                                exercise.isCustom ? Icons.person_outline : Icons.fitness_center,
+                                color: exercise.isCustom ? const Color(0xFF00E676) : Colors.grey,
+                                size: 20,
+                              ),
+                            ],
                           ),
+                          onTap: () => _showExerciseDetailSheet(context, exercise),
                         ),
                       );
                     },
@@ -103,6 +112,98 @@ class ExerciseListScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showExerciseDetailSheet(BuildContext context, Exercise exercise) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Theme.of(context).cardColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      exercise.name,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.grey),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                ],
+              ),
+              Text(
+                '${exercise.category} • ${exercise.equipment ?? "General"} • ${exercise.isCardio ? "Cardio" : (exercise.isTimeBased ? "Por Tiempo" : "Por Repeticiones")}',
+                style: const TextStyle(color: Color(0xFF00E676), fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+
+              // Execution Preview Container (Local GIF or Anatomical Illustration)
+              Container(
+                width: double.infinity,
+                height: 140,
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        exercise.isCardio
+                            ? Icons.directions_run
+                            : (exercise.category == 'TRX' ? Icons.sports_gymnastics : Icons.fitness_center),
+                        size: 48,
+                        color: const Color(0xFF00E676),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Ejecución Técnica de ${exercise.name}',
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00E676),
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Conectando con Firebase Storage para cargar animación HD...'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.hd),
+                  label: const Text('Ver Detalle HD en la Nube', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

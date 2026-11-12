@@ -6,6 +6,8 @@ class Exercise {
   final bool isCustom;
   final String trackingType; // 'reps', 'time' (seconds), or 'cardio' (minutes & incline/resistance)
   final String? notes;
+  final String? localGifAsset;
+  final String? hdGifUrl;
 
   Exercise({
     required this.id,
@@ -15,6 +17,8 @@ class Exercise {
     this.isCustom = false,
     this.trackingType = 'reps',
     this.notes,
+    this.localGifAsset,
+    this.hdGifUrl,
   });
 
   bool get isTimeBased => trackingType == 'time';
