@@ -246,12 +246,14 @@ class ExerciseListScreen extends ConsumerWidget {
     if (lower.contains('flexiones')) return 'assets/gifs/pushups.gif';
     if (lower.contains('dominadas')) return 'assets/gifs/pullups.gif';
     if (lower.contains('jalón')) return 'assets/gifs/lat_pulldown.gif';
+    if (lower.contains('remo') && lower.contains('mancuerna')) return 'assets/gifs/dumbbell_row.gif';
     if (lower.contains('remo')) return 'assets/gifs/barbell_row.gif';
     if (lower.contains('peso muerto')) return 'assets/gifs/deadlift.gif';
     if (lower.contains('sentadilla')) return 'assets/gifs/squat.gif';
     if (lower.contains('prensa')) return 'assets/gifs/leg_press.gif';
     if (lower.contains('militar') || lower.contains('hombros')) return 'assets/gifs/overhead_press.gif';
-    if (lower.contains('bíceps') || lower.contains('martillo')) return 'assets/gifs/biceps_curl.gif';
+    if (lower.contains('martillo') || lower.contains('mancuerna')) return 'assets/gifs/dumbbell_biceps_curl.gif';
+    if (lower.contains('bíceps')) return 'assets/gifs/biceps_curl.gif';
     if (lower.contains('tríceps') || lower.contains('francés')) return 'assets/gifs/triceps_pushdown.gif';
     if (lower.contains('crunches') || lower.contains('plancha')) return 'assets/gifs/crunches.gif';
     if (lower.contains('cinta') || lower.contains('correr')) return 'assets/gifs/running.gif';
