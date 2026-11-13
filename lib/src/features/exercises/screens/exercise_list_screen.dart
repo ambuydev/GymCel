@@ -158,7 +158,7 @@ class ExerciseListScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
 
-              // Execution Preview Container (Local Verified GIF or TRX / Anatomical Card)
+              // Execution Preview Container (Local Verified 3D GIF)
               Container(
                 width: double.infinity,
                 height: 180,
@@ -236,9 +236,26 @@ class ExerciseListScreen extends ConsumerWidget {
   }
 
   String? _getGifAssetPath(String name, String category) {
-    if (category == 'TRX' || name.toLowerCase().contains('trx')) return null;
-
     final lower = name.toLowerCase();
+
+    // TRX / Suspensión
+    if (category == 'TRX' || lower.contains('trx')) {
+      if (lower.contains('remo')) return 'assets/gifs/trx_row.gif';
+      if (lower.contains('press') || lower.contains('flexion')) return 'assets/gifs/trx_chest_press.gif';
+      if (lower.contains('sentadilla') || lower.contains('pistol') || lower.contains('zancada')) return 'assets/gifs/trx_squat.gif';
+      if (lower.contains('bíceps')) return 'assets/gifs/trx_biceps_curl.gif';
+      if (lower.contains('tríceps')) return 'assets/gifs/trx_triceps_extension.gif';
+      return 'assets/gifs/trx_row.gif';
+    }
+
+    // Cardio
+    if (lower.contains('cinta') || lower.contains('caminadora')) return 'assets/gifs/treadmill.gif';
+    if (lower.contains('bicicleta') || lower.contains('fija') || lower.contains('ergométrica')) return 'assets/gifs/stationary_bike.gif';
+    if (lower.contains('elíptica')) return 'assets/gifs/elliptical.gif';
+    if (lower.contains('remo ergométrico') || lower.contains('máquina de remo')) return 'assets/gifs/rowing_machine.gif';
+    if (lower.contains('correr')) return 'assets/gifs/running.gif';
+
+    // Traditional Gym Exercises
     if (lower.contains('press de banca')) return 'assets/gifs/bench_press.gif';
     if (lower.contains('inclinado')) return 'assets/gifs/incline_bench_press.gif';
     if (lower.contains('aperturas')) return 'assets/gifs/chest_fly.gif';
@@ -256,7 +273,6 @@ class ExerciseListScreen extends ConsumerWidget {
     if (lower.contains('bíceps')) return 'assets/gifs/biceps_curl.gif';
     if (lower.contains('tríceps') || lower.contains('francés')) return 'assets/gifs/triceps_pushdown.gif';
     if (lower.contains('crunches') || lower.contains('plancha')) return 'assets/gifs/crunches.gif';
-    if (lower.contains('cinta') || lower.contains('correr')) return 'assets/gifs/running.gif';
     return null;
   }
 
