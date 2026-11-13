@@ -81,6 +81,8 @@ class ExerciseListScreen extends ConsumerWidget {
                     itemCount: exercises.length,
                     itemBuilder: (context, index) {
                       final exercise = exercises[index];
+                      final gifAsset = _getGifAssetPath(exercise.name, exercise.category);
+
                       return Card(
                         margin: const EdgeInsets.only(bottom: 8),
                         child: ListTile(
@@ -95,7 +97,11 @@ class ExerciseListScreen extends ConsumerWidget {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.info_outline, color: Color(0xFF00E676), size: 20),
+                              Icon(
+                                gifAsset != null ? Icons.slow_motion_video : Icons.info_outline,
+                                color: const Color(0xFF00E676),
+                                size: 20,
+                              ),
                               const SizedBox(width: 8),
                               Icon(
                                 exercise.isCustom ? Icons.person_outline : Icons.fitness_center,
@@ -116,6 +122,8 @@ class ExerciseListScreen extends ConsumerWidget {
   }
 
   void _showExerciseDetailSheet(BuildContext context, Exercise exercise) {
+    final gifAsset = _getGifAssetPath(exercise.name, exercise.category);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Theme.of(context).cardColor,
@@ -150,34 +158,25 @@ class ExerciseListScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
 
-              // Execution Preview Container (Local GIF or Anatomical Illustration)
+              // Execution Preview Container (Local Verified GIF or TRX / Anatomical Card)
               Container(
                 width: double.infinity,
-                height: 140,
+                height: 180,
                 decoration: BoxDecoration(
                   color: Colors.black26,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.white10),
                 ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        exercise.isCardio
-                            ? Icons.directions_run
-                            : (exercise.category == 'TRX' ? Icons.sports_gymnastics : Icons.fitness_center),
-                        size: 48,
-                        color: const Color(0xFF00E676),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Ejecución Técnica de ${exercise.name}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
+                child: gifAsset != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          gifAsset,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) => _buildFallbackIllustration(exercise),
+                        ),
+                      )
+                    : _buildFallbackIllustration(exercise),
               ),
               const SizedBox(height: 16),
 
@@ -191,7 +190,7 @@ class ExerciseListScreen extends ConsumerWidget {
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Conectando con Firebase Storage para cargar animación HD...'),
+                        content: Text('Conectando con Firebase Storage para cargar animación HD de TRX...'),
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -205,6 +204,58 @@ class ExerciseListScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Widget _buildFallbackIllustration(Exercise exercise) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            exercise.isCardio
+                ? Icons.directions_run
+                : (exercise.category == 'TRX' ? Icons.sports_gymnastics : Icons.fitness_center),
+            size: 48,
+            color: const Color(0xFF00E676),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Ejecución Técnica de ${exercise.name}',
+            style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+          if (exercise.category == 'TRX') ...[
+            const SizedBox(height: 4),
+            const Text(
+              'Sujeción en Cintas de Suspensión TRX',
+              style: TextStyle(color: Colors.grey, fontSize: 11),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  String? _getGifAssetPath(String name, String category) {
+    if (category == 'TRX' || name.toLowerCase().contains('trx')) return null;
+
+    final lower = name.toLowerCase();
+    if (lower.contains('press de banca')) return 'assets/gifs/bench_press.gif';
+    if (lower.contains('inclinado')) return 'assets/gifs/incline_bench_press.gif';
+    if (lower.contains('aperturas')) return 'assets/gifs/chest_fly.gif';
+    if (lower.contains('fondos')) return 'assets/gifs/dips.gif';
+    if (lower.contains('flexiones')) return 'assets/gifs/pushups.gif';
+    if (lower.contains('dominadas')) return 'assets/gifs/pullups.gif';
+    if (lower.contains('jalón')) return 'assets/gifs/lat_pulldown.gif';
+    if (lower.contains('remo')) return 'assets/gifs/barbell_row.gif';
+    if (lower.contains('peso muerto')) return 'assets/gifs/deadlift.gif';
+    if (lower.contains('sentadilla')) return 'assets/gifs/squat.gif';
+    if (lower.contains('prensa')) return 'assets/gifs/leg_press.gif';
+    if (lower.contains('militar') || lower.contains('hombros')) return 'assets/gifs/overhead_press.gif';
+    if (lower.contains('bíceps') || lower.contains('martillo')) return 'assets/gifs/biceps_curl.gif';
+    if (lower.contains('tríceps') || lower.contains('francés')) return 'assets/gifs/triceps_pushdown.gif';
+    if (lower.contains('crunches') || lower.contains('plancha')) return 'assets/gifs/crunches.gif';
+    if (lower.contains('cinta') || lower.contains('correr')) return 'assets/gifs/running.gif';
+    return null;
   }
 
   void _showAddExerciseDialog(BuildContext context, WidgetRef ref) {

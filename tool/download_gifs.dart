@@ -1,7 +1,7 @@
 import 'dart:io';
 
 void main() async {
-  print('Iniciando descarga masiva de GIFs 3D animados reales desde lontraeye/exercise-gifs-db...');
+  print('Iniciando descarga de los 34 GIFs 3D animados VERIFICADOS y EXACTOS desde lontraeye/exercise-gifs-db...');
 
   final gifsDir = Directory('assets/gifs');
   if (!gifsDir.existsSync()) {
@@ -10,8 +10,8 @@ void main() async {
 
   const baseUrl = 'https://raw.githubusercontent.com/lontraeye/exercise-gifs-db/main/';
 
-  // Map of exercise names to remote high-definition 3D animated GIF paths
-  final Map<String, String> remoteGifMap = {
+  // Map of 34 verified traditional exercises to their EXACT 3D animated GIF paths
+  final Map<String, String> verifiedGifMap = {
     // Pecho
     'bench_press.gif': 'pectorals/barbell-bench-press.gif',
     'incline_bench_press.gif': 'pectorals/barbell-incline-bench-press.gif',
@@ -57,25 +57,15 @@ void main() async {
     // Cardio
     'treadmill.gif': 'cardio/treadmill.gif',
     'stationary_bike.gif': 'cardio/stationary-bike.gif',
-    'cycling.gif': 'cardio/stationary-bike.gif',
     'running.gif': 'cardio/running.gif',
     'elliptical.gif': 'cardio/elliptical.gif',
     'rowing_machine.gif': 'cardio/rowing-machine.gif',
-
-    // TRX / Suspensión
-    'trx_row.gif': 'lats/dumbbell-one-arm-row.gif',
-    'trx_chest_press.gif': 'pectorals/push-up.gif',
-    'trx_pushup.gif': 'pectorals/push-up.gif',
-    'trx_squat.gif': 'quads/barbell-squat.gif',
-    'trx_pistol_squat.gif': 'quads/barbell-squat.gif',
-    'trx_lunge.gif': 'quads/barbell-squat.gif',
-    'trx_biceps_curl.gif': 'biceps/barbell-curl.gif',
-    'trx_triceps_extension.gif': 'triceps/cable-pushdown.gif',
   };
 
   final client = HttpClient();
+  int successCount = 0;
 
-  for (final entry in remoteGifMap.entries) {
+  for (final entry in verifiedGifMap.entries) {
     final localFilename = entry.key;
     final remotePath = entry.value;
     final targetFile = File('assets/gifs/$localFilename');
@@ -90,7 +80,8 @@ void main() async {
       if (response.statusCode == 200) {
         final bytes = await response.fold<List<int>>([], (acc, chunk) => acc..addAll(chunk));
         await targetFile.writeAsBytes(bytes);
-        print('✅ Guardado: $localFilename (${bytes.length} bytes)');
+        successCount++;
+        print('✅ [$successCount/34] Guardado: $localFilename (${bytes.length} bytes)');
       } else {
         print('⚠️ Código HTTP ${response.statusCode} para $remotePath');
       }
@@ -100,5 +91,5 @@ void main() async {
   }
 
   client.close();
-  print('\n🎉 Proceso finalizado. Todos los GIFs 3D animados reales han sido descargados en assets/gifs/!');
+  print('\n🎉 Proceso finalizado. $successCount GIFs 3D VERIFICADOS han sido descargados en assets/gifs/!');
 }
